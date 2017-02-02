@@ -21,9 +21,9 @@ import re
 
 ## Write code to define your parse_counted_words function here.
 def parse_counted_words(s):
-    word = re.findall('^\d+\s[a-zA-Z]', s)
-    return word
-
+    word = re.findall('^\d*\s\S*\b', s)
+    if word:
+        return word
 
 
 ## PART 2: 200 points
@@ -33,7 +33,7 @@ def parse_counted_words(s):
 ## (a) Write Python code to determine how many of these paths identify FILES, not directories. Save that number in the variable file_paths_num.
 file = open('computer_paths.txt')
 
-file_paths_num = 
+#file_paths_num = 
 ## (b) Write Python code to determine how many of these paths are FULL paths, not relative paths. Save that number in the variable full_paths_num.
 file = open('computer_paths.txt')
 path2 = []
