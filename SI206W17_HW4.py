@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 ## PART 1 (100 points) - Get the HTML data from http://www.nytimes.com (the New York Times home page) and save it in a file called nytimes_data.html.
 outfile = open("nytimes_data.html", 'w')
 data = requests.get("http://www.nytimes.com").text
-soup = BeautifulSoup(data)
+soup = BeautifulSoup(data, "html.parser")
 for link in soup.find_all('a'):
 	dataLine = link.get('href')
 	outfile.write(dataLine + '\n')
@@ -47,7 +47,7 @@ outfile.close()
 ## NOTE that the provided link does not include saving the online data in a file as part of the process. But it still provides very useful hints/tricks about how to look for and identify the headlines on the NY Times page.
 #infile = open("nytimes_data.html", "r")
 nyData = open("nytimes_data.html", 'r').read()
-soup = BeautifulSoup(nyData)
+soup = BeautifulSoup(nyData, "html.parser")
 title = soup.find_all('h1', {'class':'story-heading'})
 titleList = []
 nytimes_headlines = []
@@ -81,8 +81,6 @@ htmldoc = response.text
 soup = BeautifulSoup(htmldoc,"html.parser")
 people = soup.find_all("div",{"class":"views-row"})
 umsi_titles = {}
-for row in people:
-	umsi_titles.update(row)
 
 ## It may be helpful to translate the following from English to code:
 
