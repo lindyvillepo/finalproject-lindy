@@ -57,7 +57,6 @@ try:
 	cache_file = open(CACHE_NAME, 'r') #read data from the file
 	cache_contents = cache_file.read() #if it's there, make it into a string
 	CACHE_DICTION = json.loads(cache_contents) #loads it in a dictionary
-	cache_file.close() #close the file
 except:
 	CACHE_DICTION = {} #if there isn't any data, then dictionary is empty.
 
@@ -65,25 +64,34 @@ except:
 # gets new data or caches data, depending upon what the input to search for is. You can model 
 # this off the class exercise from Tuesday.
 
-def addDictionary(artist):
-	BASE_URL = "https://www.twitter.com"
-	full_url = requestURL()
+def get_user_tweets(user_input):
+	search = "twitter_{}".format(user_input)
+	if search in CACHE_DICTION:
+		print('using cached data for', user_input)
+		twitter_results = CACHE_DICTION[search]
+	else:
+		print('getting data from internet for', user_input)
+		twitter_results = api.user_timeline(user_input)
+		CACHE_DICTION[search] = twitter_results
+		f = open(CACHE_NAME, 'w')
+		f.write(json.dumps(CACHE_DICTION))
+		f.close()
+
 ## 3. Invoke your function, save the return value in a variable, and explore the data you got back!
+	tweets = []
+	created = []
+	for tweet in twitter_results:
+		tweets.append(tweet["text"])
+		created.append(tweet["created_at"])
+	return (tweets[:3], created[:3])
 
 ## 4. With what you learn from the data -- e.g. how exactly to find the text of each tweet in 
 # the big nested structure -- write code to print out content from 3 tweets, as shown above.
-
-def caching_data(dic):
-	alphabetized_keys = sorted(dic.keys())
-	new_list = []
-	for key in alphabetized_keys:
-		new_list.append(k, dic[k])
-	return new_list
-
-def requestURL(baseurl, params = {}):
-	request = requests.Request(method = 'GET', url = baseurl, params = caching_data(params))
-	prepped = request.prepare()
-	return prepped.url
+three_tweets = get_user_tweets("twitter")
+for num in range(3):
+	print("TEXT:", three_tweets[0][num])
+	print("CREATED AT:", three_tweets[1][num])
+	print("\n")
 
 
 
