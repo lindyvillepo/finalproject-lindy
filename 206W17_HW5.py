@@ -2,10 +2,11 @@ import unittest
 import tweepy
 import requests
 import json
+import twitter_info
 
 ## SI 206 - W17 - HW5
-## COMMENT WITH:
-## Your section day/time:
+## COMMENT WITH: Lindy Villeponteau
+## Your section day/time: Thursday 3pm
 ## Any names of people you worked with on this assignment:
 
 ######## 500 points total ########
@@ -35,10 +36,10 @@ import json
 ## **** If you choose not to do that, we strongly advise using authentication information for an 'extra' Twitter account you make just for this class, and not your personal account, because it's not ideal to share your authentication information for a real account that you use frequently.
 
 ## Get your secret values to authenticate to Twitter. You may replace each of these with variables rather than filling in the empty strings if you choose to do the secure way for 50 EC points
-consumer_key = "" 
-consumer_secret = ""
-access_token = ""
-access_token_secret = ""
+consumer_key = twitter_info.consumer_key 
+consumer_secret = twitter_info.consumer_secret
+access_token = twitter_info.access_token
+access_token_secret = twitter_info.access_token_secret
 ## Set up your authentication to Twitter
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -47,13 +48,42 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser()) # Set up library to g
 ## Write the rest of your code here!
 
 #### Recommended order of tasks: ####
-## 1. Set up the caching pattern start -- the dictionary and the try/except statement shown in class.
-## 2. Write a function to get twitter data that works with the caching pattern, so it either gets new data or caches data, depending upon what the input to search for is. You can model this off the class exercise from Tuesday.
+## 1. Set up the caching pattern start -- the dictionary and the try/except statement shown 
+# in class.
+
+CACHE_NAME = 'cache_tweepy_file.json' #string for the file
+
+try:
+	cache_file = open(CACHE_NAME, 'r') #read data from the file
+	cache_contents = cache_file.read() #if it's there, make it into a string
+	CACHE_DICTION = json.loads(cache_contents) #loads it in a dictionary
+	cache_file.close() #close the file
+except:
+	CACHE_DICTION = {} #if there isn't any data, then dictionary is empty.
+
+## 2. Write a function to get twitter data that works with the caching pattern, so it either 
+# gets new data or caches data, depending upon what the input to search for is. You can model 
+# this off the class exercise from Tuesday.
+
+def addDictionary(artist):
+	BASE_URL = "https://www.twitter.com"
+	full_url = requestURL()
 ## 3. Invoke your function, save the return value in a variable, and explore the data you got back!
-## 4. With what you learn from the data -- e.g. how exactly to find the text of each tweet in the big nested structure -- write code to print out content from 3 tweets, as shown above.
 
+## 4. With what you learn from the data -- e.g. how exactly to find the text of each tweet in 
+# the big nested structure -- write code to print out content from 3 tweets, as shown above.
 
+def caching_data(dic):
+	alphabetized_keys = sorted(dic.keys())
+	new_list = []
+	for key in alphabetized_keys:
+		new_list.append(k, dic[k])
+	return new_list
 
+def requestURL(baseurl, params = {}):
+	request = requests.Request(method = 'GET', url = baseurl, params = caching_data(params))
+	prepped = request.prepare()
+	return prepped.url
 
 
 
