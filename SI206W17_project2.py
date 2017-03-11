@@ -1,8 +1,8 @@
 ## SI 206 W17 - Project 2 
 
 ## COMMENT HERE WITH:
-## Your name:
-## Anyone you worked with on this project:
+## Your name: Lindy Villeponteau
+## Anyone you worked with on this project: Tahmeed Tureen
 
 ## Below we have provided import statements, comments to separate out the parts of the project, instructions/hints/examples, and at the end, tests. See the PDF of instructions for more detail. 
 ## You can check out the SAMPLE206project2_caching.json for an example of what your cache file might look like.
@@ -68,27 +68,31 @@ def find_urls(s):
 ## Start with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All  
 ## End with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=11 
 
-#def get_umsi_data():
-#	si_url = "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All"
-#	htmldata = requests.get(si_url, headers={"User-Agent": "SI_CLASS"})
-#	if htmldata in CACHE_DICTION:
-#		print("true")
-#	else: 
-#		CACHE_DICTION[search] = twitter_results
-#		f = open(CACHE_NAME, 'w')
-#		f.write(json.dumps(CACHE_DICTION))
-#		f.close()
-
-#soup = BeautifulSoup(htmldata, "html.parser")
-#people = soup.find_all("div", {"class": "views-row"})
+def get_umsi_data():
+	key = "umsi_directory_data"
+	if key in CACHE_DICTION:
+		return CACHE_DICTION[key]
+	else:
+		umsi_directory_key = []
+		for i in range(12):
+			si_url = "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=" + str(i)
+			response = requests.get(si_url, headers={"User-Agent":"SI_CLASS"}).text
+			umsi_directory_key.append(response)
+			CACHE_DICTION[key] = umsi_directory_key
+			f = open(CACHE_NAME, 'w')
+			f.write(json.dumps(CACHE_DICTION))
+			f.close()
 
 ## PART 2 (b) - Create a dictionary saved in a variable umsi_titles 
 ## whose keys are UMSI people's names, and whose associated values are those people's titles, e.g. "PhD student" or "Associate Professor of Information"...
-#	umsi_titles = {}
-#	for names in people:
-#		title = names.find("div", {"class": "field-name-title"})
-#		description = names.find("div", {"class": "field-name-field-person-titles"})
-#		umsi_titles[title.string] = description.string
+umsi_titles = {}
+for page in get_umsi_data():
+	soup = BeautifulSoup(page, "html.parser")
+	people = soup.find_all("div", {"class": "views-row"})
+	for names in people:
+		title = names.find("div", {"class": "field-name-title"})
+		description = names.find("div", {"class": "field-name-field-person-titles"})
+		umsi_titles[title.string] = description.string
 
 ## PART 3 (a) - Define a function get_five_tweets
 ## INPUT: Any string
@@ -97,18 +101,16 @@ def find_urls(s):
 def get_five_tweets(user_input):
 	search = "twitter_{}".format(user_input)
 	if search in CACHE_DICTION:
-		print('using cached data for', user_input)
 		twitter_results = CACHE_DICTION[search]
 	else:
-		print('getting data from internet for', user_input)
-		twitter_results = api.user_timeline(user_input)
+		twitter_results = api.search(q=user_input)
 		CACHE_DICTION[search] = twitter_results
 		f = open(CACHE_NAME, 'w')
 		f.write(json.dumps(CACHE_DICTION))
 		f.close()
 
 	tweets = []
-	for tweet in twitter_results:
+	for tweet in twitter_results["statuses"]:
 		tweets.append(tweet["text"])
 	return tweets[:5]
 
@@ -116,10 +118,12 @@ def get_five_tweets(user_input):
 five_tweets = get_five_tweets("University of Michigan")
 
 ## PART 3 (c) - Iterate over the five_tweets list, invoke the find_urls function that you defined in Part 1 on each element of the list, and accumulate a new list of each of the total URLs in all five of those tweets in a variable called tweet_urls_found. 
-tweet_urls_found = []
-for num in range(5):
-	urls = find_urls(five_tweets[num])
-	tweet_urls_found.append(urls)
+tweet_urls_list = []
+for tweet in five_tweets:
+	for urls in find_urls(tweet):
+		tweet_urls_list.append(a_url)
+
+tweet_urls_found = tuple(tweet_urls_list)
 
 ########### TESTS; DO NOT CHANGE ANY CODE BELOW THIS LINE! ###########
 
