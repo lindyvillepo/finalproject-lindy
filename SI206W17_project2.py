@@ -51,11 +51,7 @@ except:
 ## find_urls("I love looking at websites like http://etsy.com and http://instagram.com and stuff") should return ["http://etsy.com","http://instagram.com"]
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 def find_urls(s):
-	urls = []
-	url = re.findall(r"http[s]?:\/\/(?:\w\w+\.)+\w\w+", s)
-	for link in url:
-		urls.append(link)
-
+	urls = re.findall(r"http[s]?:\/\/(?:\w+\.)+\w\S+", s)
 	return urls
 
 ## PART 2 (a) - Define a function called get_umsi_data.
@@ -70,21 +66,22 @@ def find_urls(s):
 
 def get_umsi_data():
 	key = "umsi_directory_data"
+	umsi_directory_list = []
 	if key in CACHE_DICTION:
 		return CACHE_DICTION[key]
 	else:
-		umsi_directory_key = []
 		for i in range(12):
 			si_url = "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=" + str(i)
 			response = requests.get(si_url, headers={"User-Agent":"SI_CLASS"}).text
-			umsi_directory_key.append(response)
-			CACHE_DICTION[key] = umsi_directory_key
+			umsi_directory_list.append(response)
+			CACHE_DICTION[key] = umsi_directory_list
 			f = open(CACHE_NAME, 'w')
 			f.write(json.dumps(CACHE_DICTION))
 			f.close()
 
 ## PART 2 (b) - Create a dictionary saved in a variable umsi_titles 
 ## whose keys are UMSI people's names, and whose associated values are those people's titles, e.g. "PhD student" or "Associate Professor of Information"...
+get_umsi_data()
 umsi_titles = {}
 for page in get_umsi_data():
 	soup = BeautifulSoup(page, "html.parser")
@@ -118,12 +115,10 @@ def get_five_tweets(user_input):
 five_tweets = get_five_tweets("University of Michigan")
 
 ## PART 3 (c) - Iterate over the five_tweets list, invoke the find_urls function that you defined in Part 1 on each element of the list, and accumulate a new list of each of the total URLs in all five of those tweets in a variable called tweet_urls_found. 
-tweet_urls_list = []
+tweet_urls_found = ()
 for tweet in five_tweets:
-	for urls in find_urls(tweet):
-		tweet_urls_list.append(a_url)
-
-tweet_urls_found = tuple(tweet_urls_list)
+	url = find_urls(tweet)
+	tweet_urls_found = tweet_urls_found + tuple(url)
 
 ########### TESTS; DO NOT CHANGE ANY CODE BELOW THIS LINE! ###########
 
