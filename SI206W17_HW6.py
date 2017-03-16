@@ -93,7 +93,30 @@ student_tups_list = list(student_tups)
 
 ## You can test this out with any code you like here, and similar below other problems, but make sure to comment out any code that uses up the iterator in order to pass the tests!
 
+## [PROBLEM 5]
+print("\n\n***** Problem 5 *****")
+# Use a list comprehension to create a list of Student instances out of the student_tups list you just created in Problem 2, and save that list in a variable called programmers. 
+# You should make sure you pass these tests before continuing, as you'll need this list for problems later on!
+programmers = [Student(i, j, z) for i, j, z in student_tups_list]
 
+## [PROBLEM 6]
+print("\n\n***** Problem 6 *****")
+
+# A Student's programming_productivity is defined as that student's number of programs written divided by the years they have been at UMich.
+def programming_productivity(student):
+    return (student.num_programs / student.years_UM)
+# Use the Python map function on the programmers list you just created, in order to create an map instance iterator of numbers representing the productivity of each student. Save the map iterator in a variable called prod_iter.
+prod_iter = map(programming_productivity, programmers)
+## Write code to cast that iterator to a list. Save that list in the variable prod_list.
+prod_list = list(prod_iter)
+## You may add a method to the Student class if you wish in order to do this, but you do not need to. (If you do, make sure you do not create any syntax errors that keep code/tests from running!)
+
+## [PROBLEM 7]
+print("\n\n***** Problem 7 *****")
+# Create a list of tuples wherein each tuple has a student's name and productivity value. Save the list of tuples in a variable called names_and_productivities. To do this, you should use a list comprehension (you may also use the zip function, and you may use any variables you have already created).
+student_names = list(map(lambda s: s.name, programmers))
+names_and_productivities = list(zip(student_names, prod_list))
+## But be careful that if you use answers from previous problems, you use the LISTs you generated, so that all your tests can still pass and you avoid confusion!
 
 
 ##### TESTS BELOW THIS LINE. DO NOT CHANGE ANY CODE BELOW THIS LINE. #####
