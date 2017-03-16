@@ -118,6 +118,79 @@ student_names = list(map(lambda s: s.name, programmers))
 names_and_productivities = list(zip(student_names, prod_list))
 ## But be careful that if you use answers from previous problems, you use the LISTs you generated, so that all your tests can still pass and you avoid confusion!
 
+## [PROBLEM 8]
+print("\n\n***** Problem 8 *****")
+# Use the Python filter function to select the subset of programmers who have names with 5 or more characters. (i.e. ["Albert","Dinesh","Euijin"]) Your result should be an filter object that points to Student instances. Save that filter iterator in a variable called long_names.
+def programmer_name(student):
+    if len(student.name) >= 5:
+        return student
+long_names = filter(programmer_name, programmers)
+
+## Then write code to cast the value of long_names to a list and save it in the variable long_names_list. 
+long_names_list = list(long_names)
+
+## [PROBLEM 9]
+print("\n\n***** Problem 9 *****")
+
+# Use a list comprehension to generate a LIST of just the names of those Student instances whose name is longer than their seniority (i.e., ["Albert", "Mai", "Dinesh", "Euijin"]). 
+# Assign it to a variable called names_with_not_too_much_seniority.
+names_with_not_too_much_seniority = [student.name for student in programmers if len(student.name) > student.years_UM]
+
+## Note that you can use another list you have already created for this problem.
+
+## [PROBLEM 10]
+print("\n\n***** Problem 10 *****")
+
+## Define a function called readfiles, which accepts a list of filenames as input and yields each line in each 
+# of the file with that name, assuming those files exist in the same directory as this program.
+
+## Define a generator called len_check which accepts a generator of file lines and returns a generator object of all 
+# the lines it's accepted whose length is longer than 40 characters.
+
+## Finally, write a function called main_filterer that accepts a list of filenames (strings), and returns 
+# a generator of all the lines in those files that are longer than 40 characters. 
+# The function should invoke the other function and generator, readfiles and len_check.
+
+## There is a test for this but an even more fun test is to uncomment the code below which invokes the main_filterer function and prints each line from the generator without blank lines in between (that's what the comma is doing).
+
+## The examples here http://anandology.com/python-practice-book/iterators.html in your reading may be very helpful!
+
+## We have provided files samplehw6_1.txt and samplehw6_2.txt for your use for this problem, which hopefully you have downloaded, so you can test with those file names! The test below also relies upon these files. Of course, you could also create other files for testing.
+
+# Define readfiles (make sure to close the file reference in the right place)
+def readfiles(file_list):
+    for f in file_list:
+        file = open(f, 'r')
+        for line in file:
+            yield line
+        file.close()
+
+# Define len_check
+def len_check(lines):
+    line_length = []
+    sentence = []
+    length = 0
+    for i in lines:
+        line_length.append(len(i))
+        sentence.append(i)
+        length += 1
+
+    line_tuple = (line_length, sentence)
+    for line in range(length):
+        if line_tuple[0][line] > 40:
+            yield line_tuple[1][line]
+
+# Define main_filterer
+def main_filterer(filenames):
+    file_list = readfiles(filenames)
+    return len_check(file_list)
+
+
+# Uncomment this code to test so you can see easily what results from your code. DO uncomment it. DO NOT delete or change it. (You can add other code above while you work, of course.)
+provided_file_names = ["samplehw6_1.txt","samplehw6_2.txt"]
+for ln in main_filterer(provided_file_names):
+    print(ln.rstrip('\n'), end=" ")
+#####
 
 ##### TESTS BELOW THIS LINE. DO NOT CHANGE ANY CODE BELOW THIS LINE. #####
 print("\n\nOUTPUT FROM TESTS SHOWN BELOW THIS LINE.\n\n")
