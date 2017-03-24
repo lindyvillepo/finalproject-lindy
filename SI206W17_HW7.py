@@ -160,6 +160,14 @@ conn.close()
 # Also note that the SET type is what this function should return, NOT a list or tuple. We looked at very briefly at sets when we looked at set comprehensions last week. In a Python 3 set, which is a special data type, it's a lot like a combination of a list and a dictionary: no key-value pairs, BUT each element in a set is by definition unique. You can't have duplicates.
 
 # If you want to challenge yourself here -- this function definition (what goes under the def statement) CAN be written in one line! Definitely, definitely fine to write it with multiple lines, too, which will be much easier and clearer.
+def get_twitter_users(user_input):
+	phrase = r"\@[A-Za-z0-9]+\_*[A-Za-z0-9_]*"
+	users = re.findall(phrase, user_input)
+	results = []
+	for user in users:
+		results.append(user[1:])
+
+	return set(results)
 
 
 
@@ -199,16 +207,15 @@ class PartTwo(unittest.TestCase):
 	def test7(self):
 		self.assertTrue(set([x[-1] > 2 for x in more_than_2_rts]) in [{},{True}])
 
-# class PartThree(unittest.TestCase):
-# 	def test1(self):
-# 		self.assertEqual(get_twitter_users("RT @umsi and @student3 are super fun"),{'umsi', 'student3'})
-# 	def test2(self):
-# 		self.assertEqual(get_twitter_users("the SI 206 people are all pretty cool"),set())
-# 	def test3(self):
-# 		self.assertEqual(get_twitter_users("@twitter_user_4, what did you think of the comment by @twitteruser5?"),{'twitter_user_4', 'twitteruser5'})
-# 	def test4(self):
-# 		self.assertEqual(get_twitter_users("hey @umich, @aadl is pretty great, huh? @student1 @student2"),{'aadl', 'student2', 'student1', 'umich'})
-
+class PartThree(unittest.TestCase):
+	def test1(self):
+		self.assertEqual(get_twitter_users("RT @umsi and @student3 are super fun"),{'umsi', 'student3'})
+	def test2(self):
+		self.assertEqual(get_twitter_users("the SI 206 people are all pretty cool"),set())
+	def test3(self):
+		self.assertEqual(get_twitter_users("@twitter_user_4, what did you think of the comment by @twitteruser5?"),{'twitter_user_4', 'twitteruser5'})
+	def test4(self):
+		self.assertEqual(get_twitter_users("hey @umich, @aadl is pretty great, huh? @student1 @student2"),{'aadl', 'student2', 'student1', 'umich'})
 
 if __name__ == "__main__":
 	unittest.main(verbosity=2)
