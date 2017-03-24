@@ -141,8 +141,9 @@ more_than_2_rts = cur.fetchall()
 # Select all of the TEXT values of the tweets that are retweets of another account (i.e. have "RT" at the beginning of the tweet text). Save the FIRST ONE from that group of text values in the variable first_rt. Note that first_rt should contain a single string value, not a tuple.
 rt_text = "SELECT tweet_text FROM Tweets WHERE instr(tweet_text, 'RT')"
 cur.execute(rt_text)
-first_rt = cur.fetchall()
-print(first_rt)
+tuple_rt = cur.fetchone()
+first_rt = tuple_rt[0]
+
 # Finally, done with database stuff for a bit: write a line of code to close the cursor to the database.
 conn.close()
 
@@ -180,23 +181,23 @@ class PartOne(unittest.TestCase):
 		self.assertTrue("text" in umsi_tweets[6])
 		self.assertTrue("user" in umsi_tweets[4])
 
-# class PartTwo(unittest.TestCase):
-# 	def test1(self):
-# 		self.assertEqual(type(tweet_posted_times),type([]))
-# 		self.assertEqual(type(tweet_posted_times[2]),type(("hello",)))
-# 	def test2(self):
-# 		self.assertEqual(type(more_than_2_rts),type([]))
-# 		self.assertEqual(type(more_than_2_rts[0]),type(("hello",)))
-# 	# def test3(self):
-# 	# 	self.assertEqual(set([x[3][:2] for x in more_than_2_rts]),{"RT"})
-# 	def test4(self):
-# 		self.assertTrue("+0000" in tweet_posted_times[0][0])
-# 	def test5(self):
-# 		self.assertEqual(type(first_rt),type(""))
-# 	def test6(self):
-# 		self.assertEqual(first_rt[:2],"RT")
-# 	def test7(self):
-# 		self.assertTrue(set([x[-1] > 2 for x in more_than_2_rts]) in [{},{True}])
+class PartTwo(unittest.TestCase):
+	def test1(self):
+		self.assertEqual(type(tweet_posted_times),type([]))
+		self.assertEqual(type(tweet_posted_times[2]),type(("hello",)))
+	def test2(self):
+		self.assertEqual(type(more_than_2_rts),type([]))
+		self.assertEqual(type(more_than_2_rts[0]),type(("hello",)))
+	# def test3(self):
+	# 	self.assertEqual(set([x[3][:2] for x in more_than_2_rts]),{"RT"})
+	def test4(self):
+		self.assertTrue("+0000" in tweet_posted_times[0][0])
+	def test5(self):
+		self.assertEqual(type(first_rt),type(""))
+	def test6(self):
+		self.assertEqual(first_rt[:2],"RT")
+	def test7(self):
+		self.assertTrue(set([x[-1] > 2 for x in more_than_2_rts]) in [{},{True}])
 
 # class PartThree(unittest.TestCase):
 # 	def test1(self):
