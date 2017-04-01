@@ -180,12 +180,12 @@ joined_result = cur.fetchall()
 ## Task 4 - Manipulating data with comprehensions & libraries
 
 ## Use a set comprehension to get a set of all words (combinations of characters separated by whitespace) among the descriptions in the descriptions_fav_users list. Save the resulting set in a variable called description_words.
-
-
+description_words = {x for x in descriptions_fav_users}
 
 ## Use a Counter in the collections library to find the most common character among all of the descriptions in the descriptions_fav_users list. Save that most common character in a variable called most_common_char. Break any tie alphabetically (but using a Counter will do a lot of work for you...).
-
-
+most_common_char = collections.Counter(descriptions_fav_users).most_common(1)
+print(type(most_common_char))
+print(most_common_char)
 
 ## Putting it all together...
 # Write code to create a dictionary whose keys are Twitter screen names and whose associated values are lists of tweet texts that that user posted. You may need to make additional queries to your database! To do this, you can use, and must use at least one of: the DefaultDict container in the collections library, a dictionary comprehension, list comprehension(s). Y
@@ -291,10 +291,10 @@ class Task3(unittest.TestCase):
 	def test_joined_result(self):
 		self.assertEqual(type(joined_result[0]),type(("hi","bye")),"Testing that an element in joined_result is a tuple")
 
-# class Task4(unittest.TestCase):
-# 	def test_description_words(self):
-# 		print("To help test, description words looks like:", description_words)
-# 		self.assertEqual(type(description_words),type({"hi","Bye"}),"Testing that description words is a set")
+class Task4(unittest.TestCase):
+	def test_description_words(self):
+		print("To help test, description words looks like:", description_words)
+		self.assertEqual(type(description_words),type({"hi","Bye"}),"Testing that description words is a set")
 # 	def test_common_char(self):
 # 		self.assertEqual(type(most_common_char),type(""),"Testing that most_common_char is a string")
 # 	def test_common_char2(self):
