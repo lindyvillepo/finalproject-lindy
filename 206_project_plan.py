@@ -12,7 +12,6 @@ import itertools
 import collections
 
 ##### TWEEPY SETUP CODE:
-# Authentication information should be in a twitter_info file...
 consumer_key = twitter_info.consumer_key
 consumer_secret = twitter_info.consumer_secret
 access_token = twitter_info.access_token
