@@ -32,6 +32,19 @@ try:
 except:
 	CACHE_DICTION = {}
 
+def get_user_tweets(user_input):
+	search = "twitter_{}".format(user_input)
+	if search in CACHE_DICTION:
+		twitter_results = CACHE_DICTION[search]
+	else:
+		twitter_results = api.user_timeline(user_input)
+		CACHE_DICTION[search] = twitter_results
+		f = open(CACHE_FNAME, 'w')
+		f.write(json.dumps(CACHE_DICTION))
+		f.close()
+
+	return twitter_results	
+
 
 # Write your test cases here.
 class myTests(unittest.TestCase):
