@@ -55,7 +55,7 @@ def get_user_tweets(user_input):
 		twitter_results = CACHE_DICTION[search]
 	else:
 		print('getting data from internet for', user_input)
-		twitter_results = api.search(q=user_input)
+		twitter_results = api.search(q=user_input, count=10, lang="en", result_type="popular")
 		CACHE_DICTION[search] = twitter_results
 		f = open(CACHE_NAME, 'w')
 		f.write(json.dumps(CACHE_DICTION))
@@ -145,12 +145,8 @@ class Tweet(object):
 	def __str__(self):
 		return "Searching {}, with {} favorites and {} retweets.\n".format(self.search, self.favorites, self.retweets)
 
-ryan = get_user_tweets("Ryan Gosling")
-print(ryan)
-print(type(ryan))
-
 # Write a list of the three movie search terms you want to use to search in OMDB and put them in a list called movie_search_list. Then, make a request to OMDB on each of those search terms and accumulate the dictionaries of each movie into a list called movie_info_list.
-movie_search_list = ["mean girls", "bridesmaids", "crazy, stupid, love"]
+movie_search_list = ["the proposal", "neighbors 2", "crazy, stupid, love"]
 movie_info_list = []
 for movie in movie_search_list:
 	search = get_movie_data(movie)
@@ -162,13 +158,14 @@ for movie in movie_info_list:
 	instance = Movies(movie)
 	movie_instance.append(instance)
 
-# Iterate through movie_instance to get the twitter diction of the top-paid actor. Then get an instance of that tweet and append it in the list "twitter_list"
-# twitter_list = []
-# for movie in movie_instance:
-# 	actor = movie.actors[0]
-# 	tweet_diction = get_user_tweets(actor)
-# 	instance = Tweet(tweet_diction, actor)
-# 	print(instance)
+# Iterate through movie_instance to get the twitter diction of the second top-paid actor. Then get an instance of that tweet and append it in the list "twitter_list"
+twitter_list = []
+for movie in movie_instance:
+	actor = movie.actors[1]
+	print(actor)
+	tweet_diction = get_user_tweets(actor)
+	instance = Tweet(tweet_diction, actor)
+	print(instance)
 
 ## Part 2 - Creating database and loading data into database
 
